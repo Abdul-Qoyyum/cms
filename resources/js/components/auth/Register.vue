@@ -79,9 +79,6 @@
           }
       },
       methods: {
-          ...mapActions([
-              'auth/register'
-          ]),
           async signUp(){
              if(this.validateForm()){
                  try {

@@ -46,9 +46,6 @@ export default {
                 commit('SET_AUTHENTICATED',false)
             })
         },
-        register({commit}, data){
-
-        },
         logout({commit}){
             commit('SET_USER',{})
             commit('SET_AUTHENTICATED',false)
