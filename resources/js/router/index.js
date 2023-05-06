@@ -1,7 +1,5 @@
 import { createWebHistory, createRouter } from 'vue-router';
 import store from '@/store';
-import {isEmpty} from "lodash";
-import axios from "axios";
 
 /* Other component*/
 const NotFoundComponent = () => import('@/components/NotFoundComponent.vue');
@@ -15,6 +13,7 @@ const Register = () => import('@/components/auth/Register.vue');
 /* Authenticated Component(s) */
 const DahboardBaseLayout = () => import('@/components/layouts/Default.vue');
 const Dashboard = () => import('@/components/layouts/Dashboard.vue');
+const ContactList = () => import('@/components/layouts/ContactList.vue');
 
 let routes = [
     {
@@ -60,6 +59,14 @@ let routes = [
                     title: `Dashboard`
                 }
             },
+            {
+                name: 'contacts',
+                path: 'contacts',
+                component: ContactList,
+                meta: {
+                    title: 'Contact List'
+                }
+            }
         ]
     },
     {

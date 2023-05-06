@@ -9,6 +9,7 @@ import store from '@/store';
 import './bootstrap';
 import '../css/app.css'
 import '../css/styles.css';
+import '../css/all.css';
 import 'vue-toast-notification/dist/theme-sugar.css';
 
 import setupAxios from "./api/api";
