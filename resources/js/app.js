@@ -1,4 +1,5 @@
-import { createApp } from 'vue';
+// import { createApp } from 'vue';
+import { createApp } from 'vue/dist/vue.esm-bundler';
 import axios from "axios";
 import Router from '@/router';
 import store from '@/store';
@@ -6,6 +7,7 @@ import store from '@/store';
 
 import './bootstrap';
 import '../css/app.css'
+import '../css/styles.css';
 
 import setupAxios from "./api/api";
 
