@@ -4,13 +4,9 @@ import router from '@/router';
 export default {
     namespaced: true,
     state:{
-        auth: {
-            email: "",
-            password: ""
-        },
+        user:{},
         authenticated:false,
         _token: {},
-        user:{}
     },
     getters:{
         authenticated(state){
@@ -36,15 +32,18 @@ export default {
     },
     actions:{
         login({commit}, data){
-            commit('SET_TOKEN', data);
-            return axios.post('/api/auth/me').then(({data})=>{
-                commit('SET_USER',data)
-                commit('SET_AUTHENTICATED',true)
-                router.push({name:'dashboard'})
-            }).catch(({response:{data}})=>{
-                commit('SET_USER',{})
-                commit('SET_AUTHENTICATED',false)
-            })
+            const { token, user } = data;
+            commit('SET_TOKEN', token);
+            commit('SET_USER',user);
+            commit('SET_AUTHENTICATED',true);
+            // return axios.post('/api/me').then(({data})=>{
+            //     commit('SET_USER',data)
+            //     commit('SET_AUTHENTICATED',true)
+            //     router.push({name:'dashboard'})
+            // }).catch(({response:{data}})=>{
+            //     commit('SET_USER',{})
+            //     commit('SET_AUTHENTICATED',false)
+            // })
         },
         logout({commit}){
             commit('SET_USER',{})

@@ -29,7 +29,28 @@ class AuthController extends Controller
             DB::rollBack();
             return $this->exceptionResponse($e);
         }
+    }
 
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function login(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $validator = $this->validateLoginRequest($request);
+        if($validator->fails()){
+            return $this->errorResponse('Validation Error.', $validator->errors(), HttpResponseCode::BAD_REQUEST);
+        }
+        try {
+            $response = AuthRepository::login($request);
+            return $this->successResponse($response, HttpResponseCode::OK);
+        }catch (\Exception $e){
+            return $this->exceptionResponse($e);
+        }
+    }
+
+    public function user(Request $request){
+        return $request->user();
     }
 }

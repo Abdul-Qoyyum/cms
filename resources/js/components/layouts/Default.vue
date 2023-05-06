@@ -20,7 +20,7 @@ export default {
     },
     mounted() {
         axios.get('/sanctum/csrf-cookie');
-    }
+    },
     methods:{
         ...mapActions({
             signOut:"auth/logout"

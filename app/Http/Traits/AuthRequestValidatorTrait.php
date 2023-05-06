@@ -20,4 +20,17 @@ trait AuthRequestValidatorTrait{
         ];
         return Validator::make($request->all(), $rules);
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Validation\Validator
+     */
+    public function validateLoginRequest(Request $request): \Illuminate\Validation\Validator
+    {
+        $rules = [
+            'email' => 'required|email|exists:users',
+            'password' => 'required|min:6'
+        ];
+        return Validator::make($request->all(), $rules);
+    }
 }
