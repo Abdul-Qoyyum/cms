@@ -4,11 +4,15 @@
     </main>
 </template>
 <script>
+import axios from "axios";
 export default {
     name: 'auth',
     data(){
         return {}
     },
+    mounted() {
+        axios.get('/sanctum/csrf-cookie');
+    }
 }
 </script>
 <style lang="css" scoped>

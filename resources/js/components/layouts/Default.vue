@@ -9,6 +9,7 @@
 <!--</style>-->
 <script>
 import {mapActions} from 'vuex';
+import axios from "axios";
 // import Logo from '../../../../public/assets/images/sol-cms-logo.png'
 export default {
     name:"default-layout",
@@ -17,6 +18,9 @@ export default {
             user:this.$store.state.auth.user,
         }
     },
+    mounted() {
+        axios.get('/sanctum/csrf-cookie');
+    }
     methods:{
         ...mapActions({
             signOut:"auth/logout"

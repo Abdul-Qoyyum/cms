@@ -1,0 +1,122 @@
+<template>
+    <div class="h-screen font-sans login bg-cover">
+        <div class="container mx-auto h-full flex flex-1 justify-center items-center">
+            <div class="w-full max-w-lg">
+                <div class="leading-loose">
+                    <form class="max-w-xl m-4 p-10 bg-white rounded shadow-xl">
+                        <p class="text-gray-800 font-medium">Register</p>
+                        <div class="mt-2">
+                            <label class="block text-sm text-gray-600" for="name">Name</label>
+                            <input class="w-full px-2 py-1 text-gray-700 bg-gray-200 rounded" :class="{'border border-red-500' : errors.name.length > 0}" name="name" v-model="credentials.name" @focusout="onFieldTouch($event)" type="text" placeholder="Your Name" aria-label="Name">
+                            <p v-if="errors.name.length > 0" class="text-red-500 text-xs italic">{{ errors.name }}</p>
+                        </div>
+                        <div class="mt-2">
+                            <label class="block text-sm text-gray-600" for="email">Email</label>
+                            <input class="w-full px-2  py-1 text-gray-700 bg-gray-200 rounded" :class="{'border border-red-500' : errors.email.length > 0}" @focusout="onFieldTouch($event)" v-model="credentials.email" name="email" type="email" placeholder="Your Email" aria-label="Email">
+                            <p v-if="errors.email.length > 0" class="text-red-500 text-xs italic">{{ errors.email }}</p>
+                        </div>
+                        <div class="mt-2">
+                            <label class=" block text-sm text-gray-600" for="password">Password</label>
+                            <input class="w-full px-2 py-2 text-gray-700 bg-gray-200 rounded" name="password" v-model="credentials.password" :class="{'border border-red-500' : errors.password.length > 0}" @focusout="onFieldTouch($event)" type="password" required="" placeholder="Enter Password" aria-label="Password">
+                            <p v-if="errors.password.length > 0" class="text-red-500 text-xs italic">{{ errors.password }}</p>
+                        </div>
+                        <div class="mt-2">
+                            <label class="hidden text-sm block text-gray-600" for="cus_email">Confirm Password</label>
+                            <input class="w-full px-2 py-2 text-gray-700 bg-gray-200 rounded" v-model="credentials.password_confirmation" :class="{'border border-red-500' : errors.password_confirmation.length > 0}" @focusout="onFieldTouch($event)" name="password_confirmation" placeholder="Confirm Password" type="password" required="" aria-label="password confirmation">
+                            <p v-if="errors.password_confirmation.length > 0" class="text-red-500 text-xs italic">{{ errors.password_confirmation }}</p>
+                        </div>
+
+                        <div class="mt-4">
+                            <button class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded" @click="signUp" type="button">Register</button>
+                        </div>
+                        <router-link class="inline-block right-0 align-baseline font-bold text-sm text-500 hover:text-blue-800" to="/login">
+                            Already have an account ?
+                        </router-link>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+
+  import {mapActions} from "vuex";
+  import {isEmpty} from "lodash";
+
+  export default {
+      name: 'Register',
+      data(){
+          return {
+              credentials: {
+                  name: '',
+                  email: '',
+                  password: '',
+                  password_confirmation: ''
+              },
+              errors: {
+                  name: '',
+                  email: '',
+                  password: '',
+                  password_confirmation: '',
+              },
+              server_errors: []
+          }
+      },
+      methods: {
+          ...mapActions([
+              'auth/register'
+          ]),
+          async signUp(){
+             if(this.validateForm()){
+                 console.log(this.credentials);
+             }
+          },
+          validEmail: function (email) {
+              const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+              return re.test(email);
+          },
+          onFieldTouch(event){
+              const { name, value } = event.target;
+              if(value.trim().length > 0){
+                  if(name !== 'email'){
+                      this.setFieldError(name);
+                  }else {
+                      if(!this.validEmail(value)) {
+                          this.setFieldError(name, 'Invalid email format')
+                      }else{
+                          this.setFieldError(name);
+                      }
+                  }
+              }else {
+                  this.setFieldError(name, `The ${name} field is required`);
+              }
+          },
+          setFieldError(field, errorMsg = ''){
+              this.errors[field] = errorMsg;
+          },
+          validateForm(){
+              const details = Object.keys(this.credentials);
+              let result = true;
+              for (let i = 0; i < details.length; i++){
+                  if(isEmpty(this.credentials[details[i]])){
+                      this.setFieldError(details[i],`The field ${details[i]} is required`)
+                      console.log(details[i]);
+                      result = false;
+                      break;
+                  }
+                  if(details[i] === 'email'){
+                      if(!this.validEmail(this.credentials[details[i]])){
+                          this.setFieldError(details[i],'Invalid email format')
+                          result = false;
+                          break;
+                      }
+                  }
+              }
+              return result;
+          }
+      }
+  }
+</script>
+<style lang="css" scoped>
+@import "../../../css/auth.css";
+</style>

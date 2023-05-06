@@ -9,7 +9,7 @@ const NotFoundComponent = () => import('@/components/NotFoundComponent.vue');
 /* Guest Component */
 const Auth = () => import('@/components/auth/Default.vue');
 const Login = () => import('@/components/auth/Login.vue');
-// const Register = () => import('@/components/Register.vue');
+const Register = () => import('@/components/auth/Register.vue');
 /* Guest Component */
 
 /* Authenticated Component(s) */
@@ -32,18 +32,18 @@ let routes = [
                 meta: {
                     title: `Login`
                 }
-            }
+            },
+            {
+                name: "register",
+                path: `register`,
+                component: Register,
+                meta: {
+                    middleware: "guest",
+                    title: `Register`
+                }
+            },
         ]
     },
-    // {
-    //     name: "register",
-    //     path: `/register`,
-    //     component: Register,
-    //     meta: {
-    //         middleware: "guest",
-    //         title: `Register`
-    //     }
-    // },
     {
         name: "dashboard",
         path: `/dashboard`,
@@ -79,8 +79,6 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     document.title = to.meta.title;
-    // const access_token = store?.state?.auth?._token?.access_token;
-    console.log(store.state.auth.authenticated);
     if (to?.meta?.middleware === "guest") {
         if (store.state.auth.authenticated) {
             next({ name: "home" })

@@ -46,13 +46,21 @@ export default {
                 commit('SET_AUTHENTICATED',false)
             })
         },
+        async register({commit}, data){
+            try {
+                const response = await axios.post('/api/register');
+                console.log(response);
+            }catch (e){
+                console.log('error on registration');
+                console.log(e);
+            }
+
+        },
         logout({commit}){
             commit('SET_USER',{})
             commit('SET_AUTHENTICATED',false)
         },
         refreshToken({commit},data){
-            console.log('Line 49 refresh gets called');
-            console.log(data);
             commit('SET_TOKEN', data);
         }
     }

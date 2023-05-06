@@ -19,9 +19,9 @@
                                 Forgot Password?
                             </a>
                         </div>
-                        <a class="inline-block right-0 align-baseline font-bold text-sm text-500 hover:text-blue-800" href="#">
+                        <router-link class="inline-block right-0 align-baseline font-bold text-sm text-500 hover:text-blue-800" to="/register">
                             Not registered ?
-                        </a>
+                        </router-link>
                     </form>
 
                 </div>
@@ -31,7 +31,6 @@
 </template>
 <script>
 import {mapActions} from 'vuex';
-// import Background from '../../../../public/src/images/login-new.jpeg';
 export default {
     name:"login",
     data(){
@@ -40,7 +39,6 @@ export default {
                 email:"",
                 password:""
             },
-            // background: Background,
             validationErrors:{},
             processing:false
         }
@@ -72,6 +70,6 @@ export default {
 }
 </script>
 <style lang="css" scoped>
-@import "../../../css/login.css";
+@import "../../../css/auth.css";
 </style>
 
