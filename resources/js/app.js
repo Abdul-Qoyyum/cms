@@ -1,5 +1,6 @@
 // import { createApp } from 'vue';
 import { createApp } from 'vue/dist/vue.esm-bundler';
+import ToastPlugin from 'vue-toast-notification';
 import axios from "axios";
 import Router from '@/router';
 import store from '@/store';
@@ -8,6 +9,7 @@ import store from '@/store';
 import './bootstrap';
 import '../css/app.css'
 import '../css/styles.css';
+import 'vue-toast-notification/dist/theme-sugar.css';
 
 import setupAxios from "./api/api";
 
@@ -18,4 +20,7 @@ setupAxios(axios, store);
 
 const app = createApp({}).use(Router)
     .use(store)
+    .use(ToastPlugin,{
+        position: 'top-right'
+    })
     .mount('#app');

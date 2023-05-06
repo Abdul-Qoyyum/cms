@@ -46,14 +46,7 @@ export default {
                 commit('SET_AUTHENTICATED',false)
             })
         },
-        async register({commit}, data){
-            try {
-                const response = await axios.post('/api/register');
-                console.log(response);
-            }catch (e){
-                console.log('error on registration');
-                console.log(e);
-            }
+        register({commit}, data){
 
         },
         logout({commit}){

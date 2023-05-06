@@ -27,8 +27,23 @@
                         </div>
 
                         <div class="mt-4">
-                            <button class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded" @click="signUp" type="button">Register</button>
+
+                            <button v-if="this.processing_registration" class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded" disabled type="button">
+                                <svg class="w-5 h-4 mb-1 text-white animate-spin inline-block" fill="none"
+                                     viewBox="0 0 24 24"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75"
+                                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                          fill="currentColor"></path>
+                                </svg>
+                                Processing ...
+                            </button>
+                            <button v-else class="w-1/3 px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded" @click="signUp" type="button">
+                                Register
+                            </button>
                         </div>
+
                         <router-link class="inline-block right-0 align-baseline font-bold text-sm text-500 hover:text-blue-800" to="/login">
                             Already have an account ?
                         </router-link>
@@ -42,6 +57,7 @@
 
   import {mapActions} from "vuex";
   import {isEmpty} from "lodash";
+  import axios from "axios";
 
   export default {
       name: 'Register',
@@ -59,7 +75,7 @@
                   password: '',
                   password_confirmation: '',
               },
-              server_errors: []
+              processing_registration: false
           }
       },
       methods: {
@@ -68,7 +84,24 @@
           ]),
           async signUp(){
              if(this.validateForm()){
-                 console.log(this.credentials);
+                 try {
+                     this.processing_registration = true;
+                     const response = await axios.post('/api/register',this.credentials);
+                     this.processing_registration = false;
+                     if (response.data.success === true){
+                         this.$toast.success('Registration successful');
+                         this.$router.push({ name: 'login'})
+                     }
+                 }catch ({ response}){
+                     this.processing_registration = false;
+                     const data = response.data.data;
+                     if(!isEmpty(data)){
+                         const errors = Object.values((data));
+                         for (let i = 0; i < errors.length; i++){
+                             this.$toast.warning(errors[i]);
+                         }
+                     }
+                 }
              }
           },
           validEmail: function (email) {
@@ -100,7 +133,6 @@
               for (let i = 0; i < details.length; i++){
                   if(isEmpty(this.credentials[details[i]])){
                       this.setFieldError(details[i],`The field ${details[i]} is required`)
-                      console.log(details[i]);
                       result = false;
                       break;
                   }
