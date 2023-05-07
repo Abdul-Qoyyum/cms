@@ -22,6 +22,7 @@ class Contact extends Model
         'country',
         'zip_code',
         'user_id',
+        'category_id',
     ];
 
 
