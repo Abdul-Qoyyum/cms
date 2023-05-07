@@ -216,6 +216,7 @@ module.exports = {
         "./resources/**/*.blade.php",
         "./resources/**/*.js",
         "./resources/**/*.vue",
+        "./node_modules/flowbite/**/*.js"
     ],
     important: false,
     separator: ':',
@@ -286,6 +287,7 @@ module.exports = {
         zIndex: ['responsive'],
     },
     plugins: [
-        require('tailwindcss-tables')()
+        require('tailwindcss-tables')(),
+        require('flowbite/plugin')
     ],
 }
