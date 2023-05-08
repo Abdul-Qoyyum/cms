@@ -81,4 +81,13 @@ class ContactRepository{
         }
         return ['contact' => $contact];
     }
+
+    public static function updateContact(Request $request, $id){
+        $contact = Contact::query()->find($id);
+        if(!$contact){
+            (new self)->throwException('Contact not found', HttpResponseCode::NOT_FOUND);
+        }
+        $contact->update($request->all());
+        return [ 'contact' => $contact ];
+    }
 }

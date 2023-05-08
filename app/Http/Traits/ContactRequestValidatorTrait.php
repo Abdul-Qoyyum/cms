@@ -25,4 +25,21 @@ trait ContactRequestValidatorTrait{
         ]);
     }
 
+    public function validateUpdateContactRequest(Request $request, $id): \Illuminate\Validation\Validator
+    {
+        $rules = [
+            'name' => 'nullable|string',
+            'email' => 'nullable|unique:contacts,email,'.$id,
+            'phone_number' => 'nullable|string',
+            'address' => 'nullable|string',
+            'state' => 'nullable|string',
+            'city' => 'nullable|string',
+            'country' => 'nullable|string',
+            'zip_code' => 'nullable|string',
+            'category_id' => 'nullable|string|exists:categories,id',
+        ];
+        return Validator::make($request->all(), $rules,[
+            'category_id.exists' => 'The selected category is invalid'
+        ]);
+    }
 }

@@ -30,6 +30,9 @@ Route::middleware('auth:sanctum')->group(function (){
   Route::controller(ContactController::class)->group(function (){
       Route::get('contacts','getContacts');
       Route::get('contact/{contact_id}','getContact');
+      Route::put('contact/{contact_id}','updateContact');
       Route::post('contact','createContact');
   });
+
+
 });

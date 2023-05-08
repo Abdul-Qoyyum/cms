@@ -59,4 +59,21 @@ class ContactController extends Controller
             return $this->exceptionResponse($e);
         }
     }
+
+    public function updateContact(Request $request, $id): \Illuminate\Http\JsonResponse
+    {
+        $validator = $this->validateUpdateContactRequest($request, $id);
+        if($validator->fails()){
+            return $this->errorResponse('Validation Error.', $validator->errors(), HttpResponseCode::BAD_REQUEST);
+        }
+        try {
+            DB::beginTransaction();
+            $response = ContactRepository::updateContact($request, $id);
+            DB::commit();
+            return $this->successResponse($response, HttpResponseCode::CREATED);
+        }catch (\Exception $e){
+            DB::rollBack();
+            return $this->exceptionResponse($e);
+        }
+    }
 }
