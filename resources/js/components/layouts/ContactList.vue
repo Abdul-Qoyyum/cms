@@ -10,7 +10,7 @@
                     <div class="font-semibold text-gray-800">Contacts</div>
                     <div class="pt-2 relative mx-auto text-gray-600" style="width: 40%">
                         <input class="border-2 border-gray-300 bg-white w-full h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
-                               type="search" name="search" v-model="filters.searchParam" placeholder="Search">
+                               type="search" name="search" v-model="filters.searchParam" placeholder="Search by name or email">
                         <button type="button" @click="searchResource" class="absolute right-0 top-0 mt-5 mr-4">
                             <svg class="text-gray-600 h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg"
                                  xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px"
@@ -46,7 +46,7 @@
             </header>
             <div class="p-3">
                 <div class="overflow-x-auto" style="min-height: 470px">
-                    <div v-if="processing" class="block flex items-center justify-center mt-24">
+                    <div v-if="processing" class="block flex items-center justify-center" style="min-height: 470px">
                         <div
                             class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-primary motion-reduce:animate-[spin_1.5s_linear_infinite]"
                             role="status">
@@ -231,9 +231,7 @@ export default {
         },
         async fetchCategories(){
             const response = await axios.get('/api/categories');
-            console.log(response);
             const { data } = response.data;
-            console.log(data);
             this.categories = data;
         },
         async fetchResource(){
