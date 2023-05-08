@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\ContactController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -25,4 +26,5 @@ Route::controller(AuthController::class)->group(function(){
 Route::middleware('auth:sanctum')->group(function (){
   Route::get('/me', [AuthController::class,'user']);
   Route::get('/contacts',[ContactController::class,'getContacts']);
+  Route::get('/categories',[CategoryController::class,'getAllCategories']);
 });

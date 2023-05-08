@@ -20,6 +20,6 @@ class ContactController extends Controller
     public function getContacts(Request $request): \Illuminate\Http\JsonResponse
     {
         $response = (new ContactRepository)->getContacts($request);
-        return $this->successResponse($response, HttpResponseCode::OK);
+        return $this->successResponse($response);
     }
 }

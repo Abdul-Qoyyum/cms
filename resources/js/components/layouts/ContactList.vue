@@ -10,8 +10,8 @@
                     <div class="font-semibold text-gray-800">Contacts</div>
                     <div class="pt-2 relative mx-auto text-gray-600" style="width: 40%">
                         <input class="border-2 border-gray-300 bg-white w-full h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
-                               type="search" name="search" placeholder="Search">
-                        <button type="submit" class="absolute right-0 top-0 mt-5 mr-4">
+                               type="search" name="search" v-model="filters.searchParam" placeholder="Search">
+                        <button type="button" @click="searchResource" class="absolute right-0 top-0 mt-5 mr-4">
                             <svg class="text-gray-600 h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg"
                                  xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px"
                                  viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;" xml:space="preserve"
@@ -23,21 +23,15 @@
                     </div>
                     <!-- dropdown -->
 
-                    <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" class="text-grey hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Select Category <svg class="w-3 h-3 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
+                    <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" class="text-grey hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Sort By <svg class="w-3 h-3 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
                     <!-- Dropdown menu -->
-                    <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                    <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow  dark:bg-gray-700">
                         <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
                             <li>
-                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
+                                <button type="button" @click="sortByCategory()" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">All</button>
                             </li>
-                            <li>
-                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
-                            </li>
-                            <li>
-                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
-                            </li>
-                            <li>
-                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign out</a>
+                            <li v-for="(category, i) in categories" :key="i">
+                                <button type="button" @click="sortByCategory(category.id)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{category.name}}</button>
                             </li>
                         </ul>
                     </div>
@@ -203,12 +197,16 @@ export default {
                 previous_page: 1,
             },
             contacts: [],
+            categories: [],
             processing: false
         }
     },
     mounted() {
         initFlowbite();
-        this.fetchResource();
+        Promise.all([
+            this.fetchResource(),
+            this.fetchCategories(),
+        ]);
     },
     methods: {
         getPages(noOfPages){
@@ -222,14 +220,27 @@ export default {
             this.pagination.current_page = page;
             this.fetchResource()
         },
+        sortByCategory(category_id = ""){
+          this.filters.category_id = category_id;
+          this.fetchResource();
+        },
+        searchResource(){
+            if(this.filters.searchParam.length > 0){
+                this.fetchResource();
+            }
+        },
+        async fetchCategories(){
+            const response = await axios.get('/api/categories');
+            console.log(response);
+            const { data } = response.data;
+            console.log(data);
+            this.categories = data;
+        },
         async fetchResource(){
             try {
                 const { searchParam,recordsPerPage,orderBy,direction, category_id} = this.filters;
                 const {current_page} = this.pagination;
-                const url = `/api/contacts?search=${searchParam}&page=${current_page}&recordsPerPage=${recordsPerPage}&orderBy=${orderBy}&direction=${direction}&status=${category_id}`;
-                // if(status !== "undefined"){
-                //     url += `&status=${status}`;
-                // }
+                const url = `/api/contacts?search=${searchParam}&page=${current_page}&recordsPerPage=${recordsPerPage}&orderBy=${orderBy}&direction=${direction}&category_id=${category_id}`;
                 this.processing = true;
                 const response = await axios.get(url);
                 const { data, success } = response.data;
