@@ -25,8 +25,6 @@ class ContactFactory extends Factory
             'city' => fake()->city,
             'country' => fake()->country,
             'zip_code' => fake()->postcode,
-//            'user_id',
-//            'category_id',
         ];
     }
 }

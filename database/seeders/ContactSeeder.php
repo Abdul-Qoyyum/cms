@@ -18,7 +18,7 @@ class ContactSeeder extends Seeder
      */
     public function run()
     {
-        $user = User::query()->find(1);
+        $user = User::query()->first();
         if($user){
             Contact::factory()
                 ->count(30)
