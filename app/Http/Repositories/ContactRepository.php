@@ -1,14 +1,16 @@
 <?php
 namespace App\Http\Repositories;
 
+use App\Http\Constants\HttpResponseCode;
 use App\Http\Resources\ContactResource;
 use App\Http\Traits\PaginationHelperTrait;
+use App\Http\Traits\ResponseTrait;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ContactRepository{
-    use PaginationHelperTrait;
+    use PaginationHelperTrait, ResponseTrait;
 
     /**
      * @param Request $request
@@ -63,5 +65,20 @@ class ContactRepository{
     {
         $request->merge(['user_id' => Auth::id()]);
         return Contact::query()->create($request->all());
+    }
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @return array
+     * @throws \Exception
+     */
+    public static function getContact(Request $request, $id): array
+    {
+        $contact = Contact::query()->find($id);
+        if(!$contact){
+            (new self)->throwException('Contact not found', HttpResponseCode::NOT_FOUND);
+        }
+        return ['contact' => $contact];
     }
 }

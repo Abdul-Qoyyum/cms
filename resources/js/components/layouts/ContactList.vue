@@ -131,8 +131,8 @@
                                 <div class="text-left font-medium">{{contact.zip_code}}</div>
                             </td>
                             <td class="p-2 whitespace-nowrap">
-                                <a class="cursor-pointer rounded p-1 mx-1 text-green-500">
-                                    <i class="fas fa-eye"></i></a>
+                                <router-link :to="'contact-edit/' + contact.id" class="cursor-pointer rounded p-1 mx-1 text-green-500">
+                                    <i class="fas fa-eye"></i></router-link>
                                 <a class="cursor-pointer rounded p-1 mx-1 text-yellow-500">
                                     <i class="fas fa-edit"></i></a>
                                 <a class="cursor-pointer rounded p-1 mx-1 text-red-500">

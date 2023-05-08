@@ -17,6 +17,7 @@ const ContactList = () => import('@/components/layouts/ContactList.vue');
 
 const ContactCreate = () => import('@/components/layouts/ContactCreate.vue');
 
+const ContactEdit = () => import('@/components/layouts/ContactEdit.vue');
 
 let routes = [
     {
@@ -77,7 +78,16 @@ let routes = [
                 meta: {
                     title: 'Create Contact'
                 }
+            },
+            {
+                name: 'contact-edit',
+                path: 'contact-edit/:contact_id',
+                component: ContactEdit,
+                meta: {
+                    title: 'Edit Contact'
+                }
             }
+
         ]
     },
     {

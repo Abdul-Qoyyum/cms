@@ -20,8 +20,13 @@ class ContactController extends Controller
      */
     public function getContacts(Request $request): \Illuminate\Http\JsonResponse
     {
-        $response = (new ContactRepository)->getContacts($request);
-        return $this->successResponse($response);
+        try {
+            $response = (new ContactRepository)->getContacts($request);
+            return $this->successResponse($response);
+        }catch (\Exception $e){
+            DB::rollBack();
+            return $this->exceptionResponse($e);
+        }
     }
 
     /**
@@ -41,6 +46,16 @@ class ContactController extends Controller
             return $this->successResponse($response, HttpResponseCode::CREATED);
         }catch (\Exception $e){
             DB::rollBack();
+            return $this->exceptionResponse($e);
+        }
+    }
+
+    public function getContact(Request $request, $id): \Illuminate\Http\JsonResponse
+    {
+        try {
+            $response = ContactRepository::getContact($request, $id);
+            return $this->successResponse($response);
+        }catch (\Exception $e){
             return $this->exceptionResponse($e);
         }
     }
