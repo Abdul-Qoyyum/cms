@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Constants\HttpResponseCode;
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\ContactRepository;
 use App\Http\Traits\PaginationHelperTrait;
@@ -11,7 +10,7 @@ use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
-    use PaginationHelperTrait, ResponseTrait;
+    use ResponseTrait;
 
     /**
      * @param Request $request

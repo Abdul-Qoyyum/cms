@@ -8,6 +8,19 @@
             <header class="px-5 py-4 border-b border-gray-100">
                 <div class="flex justify-between items-center">
                     <div class="font-semibold text-gray-800">Contacts</div>
+                    <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown_filter" class="text-grey ml-4 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">{{filters.recordsPerPage}}<svg class="w-3 h-3 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
+                    <!-- Dropdown menu -->
+                    <div id="dropdown_filter" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow md:w-16  dark:bg-gray-700">
+                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+                            <li>
+                                <button type="button" @click="filterResource(10)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">10</button>
+                                <button type="button" @click="filterResource(25)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">25</button>
+                                <button type="button" @click="filterResource(50)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">50</button>
+                                <button type="button" @click="filterResource(100)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">100</button>
+                            </li>
+                        </ul>
+                    </div>
+
                     <div class="pt-2 relative mx-auto text-gray-600" style="width: 40%">
                         <input class="border-2 border-gray-300 bg-white w-full h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
                                type="search" name="search" v-model="filters.searchParam" placeholder="Search by name or email">
@@ -23,15 +36,15 @@
                     </div>
                     <!-- dropdown -->
 
-                    <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" class="text-grey hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Sort By <svg class="w-3 h-3 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
+                    <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" class="text-grey hover:bg-blue-800 w-32 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button"><span class="inline-block w-24 ml-0">{{filters.category_name}}</span> <svg class="w-4 h-3 ml-6" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
                     <!-- Dropdown menu -->
-                    <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow  dark:bg-gray-700">
+                    <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-32  dark:bg-gray-700">
                         <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
                             <li>
-                                <button type="button" @click="sortByCategory()" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">All</button>
+                                <button type="button" @click="sortByCategory('All')" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">All</button>
                             </li>
                             <li v-for="(category, i) in categories" :key="i">
-                                <button type="button" @click="sortByCategory(category.id)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{category.name}}</button>
+                                <button type="button" @click="sortByCategory(category.name,category.id)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{category.name}}</button>
                             </li>
                         </ul>
                     </div>
@@ -188,6 +201,7 @@ export default {
                 orderBy: "created_at",
                 direction: "desc",
                 category_id: "",
+                category_name: "Sort By",
             },
             pagination: {
                 noOfPages: 1,
@@ -220,8 +234,13 @@ export default {
             this.pagination.current_page = page;
             this.fetchResource()
         },
-        sortByCategory(category_id = ""){
+        sortByCategory(category_name = "Sort By", category_id = "",){
           this.filters.category_id = category_id;
+          this.filters.category_name = category_name;
+          this.fetchResource();
+        },
+        filterResource(limit){
+          this.filters.recordsPerPage = limit;
           this.fetchResource();
         },
         searchResource(){
