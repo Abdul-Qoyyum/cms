@@ -5,7 +5,6 @@ import {isEmpty} from "lodash";
  **/
 export function onFieldTouch(event){
     const { name, value } = event.target;
-    console.log(name, value);
     if(value.trim().length > 0){
         if(name !== 'email'){
             this.setFieldError(name);
@@ -22,7 +21,6 @@ export function onFieldTouch(event){
 }
 
 export function setFieldError(field, errorMsg = ''){
-    console.log(this.errors);
     this.errors[field] = errorMsg;
 }
 
@@ -37,7 +35,7 @@ export function validateForm(){
     const details = Object.keys(this.fields);
     let result = true;
     for (let i = 0; i < details.length; i++){
-        if(isEmpty(this.fields[details[i]])){
+        if(isEmpty(String(this.fields[details[i]]))){
             this.setFieldError(details[i],`The field ${details[i]} is required`)
             result = false;
             break;

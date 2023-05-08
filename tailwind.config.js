@@ -288,6 +288,7 @@ module.exports = {
     },
     plugins: [
         require('tailwindcss-tables')(),
-        require('flowbite/plugin')
+        require('flowbite/plugin'),
+        require('@tailwindcss/forms')
     ],
 }

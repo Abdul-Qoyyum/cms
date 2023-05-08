@@ -47,7 +47,8 @@ export default {
         },
         logout({commit}){
             commit('SET_USER',{})
-            commit('SET_AUTHENTICATED',false)
+            commit('SET_AUTHENTICATED',false);
+            router.push({name: "login"})
         },
         refreshToken({commit},data){
             commit('SET_TOKEN', data);

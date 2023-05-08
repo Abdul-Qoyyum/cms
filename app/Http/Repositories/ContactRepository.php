@@ -54,4 +54,14 @@ class ContactRepository{
         ];
 
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Builder
+     */
+    public static function createContact(Request $request): \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Builder
+    {
+        $request->merge(['user_id' => Auth::id()]);
+        return Contact::query()->create($request->all());
+    }
 }

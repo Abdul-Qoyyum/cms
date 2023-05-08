@@ -25,6 +25,10 @@ Route::controller(AuthController::class)->group(function(){
 //Authenticated Routes
 Route::middleware('auth:sanctum')->group(function (){
   Route::get('/me', [AuthController::class,'user']);
-  Route::get('/contacts',[ContactController::class,'getContacts']);
   Route::get('/categories',[CategoryController::class,'getAllCategories']);
+
+  Route::controller(ContactController::class)->group(function (){
+      Route::get('contacts','getContacts');
+      Route::post('contact','createContact');
+  });
 });

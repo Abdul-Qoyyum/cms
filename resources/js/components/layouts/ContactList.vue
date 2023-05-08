@@ -1,9 +1,6 @@
 <template>
     <!-- dashboard home -->
     <main class="bg-white-300 flex-1 p-3 mt-5 overflow-hidden">
-<!--        <div class="flex flex-col">-->
-<!--            <p>Hello {{ user.name }}</p>-->
-<!--        </div>-->
         <div class="mx-auto bg-white shadow-lg rounded-sm border border-gray-200" style="width: 95%;">
             <header class="px-5 py-4 border-b border-gray-100">
                 <div class="flex justify-between items-center">
@@ -236,11 +233,13 @@ export default {
         },
         sortByCategory(category_name = "Sort By", category_id = "",){
           this.filters.category_id = category_id;
+          this.pagination.current_page = 1;
           this.filters.category_name = category_name;
           this.fetchResource();
         },
         filterResource(limit){
           this.filters.recordsPerPage = limit;
+          this.pagination.current_page = 1;
           this.fetchResource();
         },
         searchResource(){

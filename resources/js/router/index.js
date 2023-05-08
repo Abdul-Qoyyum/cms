@@ -15,6 +15,9 @@ const DahboardBaseLayout = () => import('@/components/layouts/Default.vue');
 const Dashboard = () => import('@/components/layouts/Dashboard.vue');
 const ContactList = () => import('@/components/layouts/ContactList.vue');
 
+const ContactCreate = () => import('@/components/layouts/ContactCreate.vue');
+
+
 let routes = [
     {
         name: "auth",
@@ -65,6 +68,14 @@ let routes = [
                 component: ContactList,
                 meta: {
                     title: 'Contact List'
+                }
+            },
+            {
+                name: 'contact-create',
+                path: 'contact-create',
+                component: ContactCreate,
+                meta: {
+                    title: 'Create Contact'
                 }
             }
         ]
