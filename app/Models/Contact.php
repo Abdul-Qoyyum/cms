@@ -33,4 +33,12 @@ class Contact extends Model
     {
         return $this->belongsTo(User::class,'user_id');
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function category(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Category::class,'category_id');
+    }
 }

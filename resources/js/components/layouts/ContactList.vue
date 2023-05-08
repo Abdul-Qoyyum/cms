@@ -4,7 +4,6 @@
 <!--        <div class="flex flex-col">-->
 <!--            <p>Hello {{ user.name }}</p>-->
 <!--        </div>-->
-        <!-- table -->
         <div class="mx-auto bg-white shadow-lg rounded-sm border border-gray-200" style="width: 95%;">
             <header class="px-5 py-4 border-b border-gray-100">
                 <div class="flex justify-between items-center">
@@ -52,8 +51,18 @@
 
             </header>
             <div class="p-3">
-                <div class="overflow-x-auto" style="min-height: 250px">
-                    <table class="table-auto w-full">
+                <div class="overflow-x-auto" style="min-height: 470px">
+                    <div v-if="processing" class="block flex items-center justify-center mt-24">
+                        <div
+                            class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-primary motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                            role="status">
+                      <span
+                          class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+                      >Loading...</span
+                      >
+                        </div>
+                    </div>
+                    <table v-else class="table-auto w-full" >
                         <thead class="text-xs font-semibold uppercase text-gray-400 bg-gray-50">
                         <tr>
                             <th class="p-2 whitespace-nowrap">
@@ -63,20 +72,23 @@
                                 <div class="font-semibold text-left">Email</div>
                             </th>
                             <th class="p-2 whitespace-nowrap">
-                                <div class="font-semibold text-left">Spent</div>
+                                <div class="font-semibold text-left">Phone</div>
                             </th>
                             <th class="p-2 whitespace-nowrap">
-                                <div class="font-semibold text-center">Country</div>
+                                <div class="font-semibold text-left">City</div>
                             </th>
 
                             <th class="p-2 whitespace-nowrap">
-                                <div class="font-semibold text-center">Country</div>
+                                <div class="font-semibold text-left">Country</div>
                             </th>
                             <th class="p-2 whitespace-nowrap">
-                                <div class="font-semibold text-center">Country</div>
+                                <div class="font-semibold text-left">State</div>
                             </th>
                             <th class="p-2 whitespace-nowrap">
-                                <div class="font-semibold text-center">Country</div>
+                                <div class="font-semibold text-left">Category</div>
+                            </th>
+                            <th class="p-2 whitespace-nowrap">
+                                <div class="font-semibold text-left">Zip Code</div>
                             </th>
                             <th class="p-2 whitespace-nowrap">
                                 <div class="font-semibold text-center">Actions</div>
@@ -85,97 +97,170 @@
                         </tr>
                         </thead>
                         <tbody class="text-sm divide-y divide-gray-100">
-                        <tr>
+                        <tr v-for="(contact, i) in contacts" :key="i">
                             <td class="p-2 whitespace-nowrap">
                                 <div class="flex items-center">
                                     <div class="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3"><img class="rounded-full" src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-05.jpg" width="40" height="40" alt="Alex Shatov"></div>
-                                    <div class="font-medium text-gray-800">Alex Shatov</div>
+                                    <div class="font-medium text-gray-800">{{contact.name}}</div>
                                 </div>
                             </td>
                             <td class="p-2 whitespace-nowrap">
-                                <div class="text-left">alexshatov@gmail.com</div>
+                                <div class="text-left">{{contact.email}}</div>
                             </td>
                             <td class="p-2 whitespace-nowrap">
-                                <div class="text-left font-medium text-green-500">$2,890.66</div>
+                                <div class="text-left font-medium text-green-500">{{contact.phone_number}}</div>
                             </td>
                             <td class="p-2 whitespace-nowrap">
-                                <div class="text-lg text-center">??</div>
+                                <div class="text-left font-medium">{{contact.city}}</div>
                             </td>
 
                             <td class="p-2 whitespace-nowrap">
-                                <div class="text-lg text-center">??</div>
+                                <div class="text-left font-medium">{{contact.country}}</div>
                             </td>
                             <td class="p-2 whitespace-nowrap">
-                                <div class="text-lg text-center">??</div>
+                                <div class="text-left font-medium">{{contact.state}}</div>
                             </td>
                             <td class="p-2 whitespace-nowrap">
-                                <div class="text-lg text-center">??</div>
+                                <div class="text-left font-medium">{{contact?.category?.name}}</div>
                             </td>
                             <td class="p-2 whitespace-nowrap">
-                                <div class="relative px-5 pt-2 w-full text-center">
-                                    <button class="focus:ring-2 rounded-md focus:outline-none" data-id="1" @click="dropdownFunction($event)" role="button" aria-label="option">
-                                        <svg class="dropbtn" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                            <path d="M4.16667 10.8332C4.62691 10.8332 5 10.4601 5 9.99984C5 9.5396 4.62691 9.1665 4.16667 9.1665C3.70643 9.1665 3.33334 9.5396 3.33334 9.99984C3.33334 10.4601 3.70643 10.8332 4.16667 10.8332Z" stroke="#9CA3AF" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"></path>
-                                            <path d="M10 10.8332C10.4602 10.8332 10.8333 10.4601 10.8333 9.99984C10.8333 9.5396 10.4602 9.1665 10 9.1665C9.53976 9.1665 9.16666 9.5396 9.16666 9.99984C9.16666 10.4601 9.53976 10.8332 10 10.8332Z" stroke="#9CA3AF" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"></path>
-                                            <path d="M15.8333 10.8332C16.2936 10.8332 16.6667 10.4601 16.6667 9.99984C16.6667 9.5396 16.2936 9.1665 15.8333 9.1665C15.3731 9.1665 15 9.5396 15 9.99984C15 10.4601 15.3731 10.8332 15.8333 10.8332Z" stroke="#9CA3AF" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"></path>
-                                        </svg>
-                                    </button>
-                                    <div class="dropdown-content bg-white shadow w-24 absolute right-0 mr-6" :class="{ 'hidden': !dropdownShow}">
-                                        <div tabindex="0" class="focus:outline-none focus:text-indigo-600 text-xs w-full hover:bg-indigo-700 py-4 px-4 cursor-pointer hover:text-white">
-                                            <p>Edit</p>
-                                        </div>
-                                        <div tabindex="0" class="focus:outline-none focus:text-indigo-600 text-xs w-full hover:bg-indigo-700 py-4 px-4 cursor-pointer hover:text-white">
-                                            <p>Delete</p>
-                                        </div>
-                                    </div>
-                                </div>
+                                <div class="text-left font-medium">{{contact.zip_code}}</div>
                             </td>
+                            <td class="p-2 whitespace-nowrap">
+                                <a class="cursor-pointer rounded p-1 mx-1 text-green-500">
+                                    <i class="fas fa-eye"></i></a>
+                                <a class="cursor-pointer rounded p-1 mx-1 text-yellow-500">
+                                    <i class="fas fa-edit"></i></a>
+                                <a class="cursor-pointer rounded p-1 mx-1 text-red-500">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                        </td>
 
                         </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
+            <!-- pagination -->
+
+            <div class="flex w-full justify-end pr-3 pb-2">
+                <nav class="inline-block"  aria-label="Page navigation example">
+                    <ul class="inline-flex items-center -space-x-px">
+                        <li v-if="passedFirstPage">
+                            <button type="button" @click="goToPage(pagination.previous_page)" class="block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                <span class="sr-only">Previous</span>
+                                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                            </button>
+                        </li>
+
+                        <li v-for="(page, i) in pagination.pages" :key="i">
+                            <button type="button" @click="goToPage(page)" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">{{page}}</button>
+                        </li>
+
+                        <li v-if="hasReachedLastPage">
+                            <button type="button" @click="goToPage(pagination.next_page)" class="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                <span class="sr-only">Next</span>
+                                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <!-- end pagination section -->
         </div>
-        <!-- table -->
     </main>
     <!-- end dashboard home -->
 </template>
 
 <script>
-import { initFlowbite } from 'flowbite'
+import { initFlowbite } from 'flowbite';
+
 export default {
     name:"contact-list",
+    computed: {
+      hasReachedLastPage(){
+          return this.pagination.current_page < this.pagination.noOfPages;
+      },
+      passedFirstPage(){
+          return this.pagination.current_page > 1;
+      }
+    },
     data(){
         return {
             user:this.$store.state.auth.user,
-            dropdownShow: false,
             filters:{
-                page: 1,
                 recordsPerPage: 10,
                 searchParam: "",
                 orderBy: "created_at",
                 direction: "desc",
-                status: "",
+                category_id: "",
             },
-            contacts: []
+            pagination: {
+                noOfPages: 1,
+                current_page: 1,
+                pages: [],
+                next_page: 2,
+                previous_page: 1,
+            },
+            contacts: [],
+            processing: false
         }
     },
     mounted() {
         initFlowbite();
+        this.fetchResource();
     },
     methods: {
-        dropdownFunction(event){
-            const { id } = event.currentTarget.dataset;
-            console.log(id);
-            this.dropdownShow = !this.dropdownShow;
+        getPages(noOfPages){
+            const list = [];
+            for (let i = 1; i <= noOfPages; i++){
+                list.push(i);
+            }
+            return list;
         },
-        fetchResource(){
-            const url = `/customers/team-members/paginate?customer_id=${customerId}&search=${searchParam}&page=${page}&recordsPerPage=${recordsPerPage}&orderBy=${orderBy}&direction=${direction}&_token=${_token}`;
-            // if(status !== "undefined"){
-            //     url += `&status=${status}`;
-            // }
+        goToPage(page){
+            this.pagination.current_page = page;
+            this.fetchResource()
+        },
+        async fetchResource(){
+            try {
+                const { searchParam,recordsPerPage,orderBy,direction, category_id} = this.filters;
+                const {current_page} = this.pagination;
+                const url = `/api/contacts?search=${searchParam}&page=${current_page}&recordsPerPage=${recordsPerPage}&orderBy=${orderBy}&direction=${direction}&status=${category_id}`;
+                // if(status !== "undefined"){
+                //     url += `&status=${status}`;
+                // }
+                this.processing = true;
+                const response = await axios.get(url);
+                const { data, success } = response.data;
+                if(success === true){
+                    console.log('Line 183');
+                    console.log(data);
+                    const { page, noOfPages } = data;
+                    this.contacts = data.data;
+                    this.pagination.current_page = page;
+                    this.pagination.pages = this.getPages(noOfPages);
+                    if(page < noOfPages){
+                        this.pagination.next_page = page + 1;
+                    }
+                    if(page > 1){
+                        this.pagination.previous_page = page - 1;
+                    }
+                    this.pagination.noOfPages = noOfPages;
+                    this.filters.searchParam = searchParam;
+                    this.filters.recordsPerPage = recordsPerPage;
+                    this.filters.orderBy = orderBy;
+                    this.filters.direction = direction;
+                    this.filters.category_id = category_id;
+                    this.processing = false;
+                }
 
+
+            }catch (error){
+                this.processing = false;
+                console.log('Line 178');
+                console.log(error);
+            }
         }
     }
 }
