@@ -53,17 +53,11 @@
                                     </div>
                                     <!-- end custom avatar -->
 
-                                    <div v-if="photo.currentImage" class="progress">
-                                        <div
-                                            class="progress-bar progress-bar-info"
-                                            role="progressbar"
-                                            :aria-valuenow="photo.progress"
-                                            aria-valuemin="0"
-                                            aria-valuemax="100"
-                                            :style="{ width: photo.progress + '%' }"
-                                        >
-                                            {{ photo.progress }}%
+                                    <div v-if="photo.currentImage" class="w-24">
+                                        <div class="w-full bg-gray-200 rounded-full dark:bg-gray-700">
+                                            <div class="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" :style="{width: photo.progress + '%'}"> {{ photo.progress }}%</div>
                                         </div>
+
                                     </div>
                                     <div v-if="photo.message" class="alert alert-secondary" role="alert">
                                         {{ photo.message }}
