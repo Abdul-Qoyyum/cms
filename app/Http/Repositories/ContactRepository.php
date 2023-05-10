@@ -8,6 +8,8 @@ use App\Http\Traits\ResponseTrait;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class ContactRepository{
     use PaginationHelperTrait, ResponseTrait;
@@ -89,5 +91,31 @@ class ContactRepository{
         }
         $contact->update($request->all());
         return [ 'contact' => $contact ];
+    }
+
+    /**
+     * @param Request $request
+     * @return bool|string|null
+     */
+    public static function createContactImage(Request $request): bool|string|null
+    {
+        $path = null;
+        if($request->hasFile('file')){
+            $file = $request->file('file');
+            $filename = $file->hashName();
+            $path = $file->storeAs('public/contact_profile',$filename,'local');
+        }
+        return Storage::disk('local')->url($path);
+    }
+
+    public static function deleteContactImage(Request $request, $disk = 'local'): array
+    {
+        $file_path = storage_path(str_replace("/storage","app/public",$request->get('path')));
+        if(file_exists($file_path)){
+            unlink($file_path);
+        }
+        return [
+            'message' => 'Image deletion successfull'
+        ];
     }
 }

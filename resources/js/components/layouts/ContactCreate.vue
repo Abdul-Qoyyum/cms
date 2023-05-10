@@ -10,13 +10,64 @@
                             <div class="col-span-full">
                                 <label for="photo" class="block text-sm font-medium leading-6 text-gray-900">Photo</label>
                                 <div class="mt-2 flex items-center gap-x-3">
-                                    <svg class="h-24 w-24 text-gray-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                        <path fill-rule="evenodd" d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" clip-rule="evenodd" />
-                                    </svg>
-                                    <label for="profile_image">
-                                        <span class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Change</span>
-                                        <input id="profile_image" name="profile_image" type="file" class="sr-only">
-                                    </label>
+<!--                                    <svg class="h-24 w-24 text-gray-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">-->
+<!--                                        <path fill-rule="evenodd" d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" clip-rule="evenodd" />-->
+<!--                                    </svg>-->
+<!--                                    <label for="profile_image">-->
+                                        <!-- old image -->
+<!--                                        <span :disabled="!photo.currentImage"-->
+<!--                                              @click="uploadProfile"-->
+<!--                                              class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Change</span>-->
+<!--                                        <div v-if="photo.previewImage">-->
+<!--                                            <div>-->
+<!--                                                <img class="preview my-3" :src="photo.previewImage" alt="" />-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+                                        <!-- end old image -->
+<!--                                        <input  id="profile_image" name="profile_image" type="file"-->
+<!--                                               accept="image/*"-->
+<!--                                               ref="file"-->
+<!--                                               @change="selectImage"-->
+<!--                                               class="sr-only">-->
+
+<!--                                    </label>-->
+
+                                    <!-- custom avatar -->
+                                    <div class="personal-image">
+                                        <label class="label">
+                                            <input type="file"
+                                                   accept="image/*"
+                                                   ref="file"
+                                                   @change="selectImage"
+                                            />
+                                            <figure class="personal-figure">
+                                                <img
+                                                    :src="photo.previewImage" class="personal-avatar" alt="avatar">
+                                                <figcaption class="personal-figcaption">
+                                                    <img
+                                                    src="https://raw.githubusercontent.com/ThiagoLuizNunes/angular-boilerplate/master/src/assets/imgs/camera-white.png"
+                                                    >
+                                                </figcaption>
+                                            </figure>
+                                        </label>
+                                    </div>
+                                    <!-- end custom avatar -->
+
+                                    <div v-if="photo.currentImage" class="progress">
+                                        <div
+                                            class="progress-bar progress-bar-info"
+                                            role="progressbar"
+                                            :aria-valuenow="photo.progress"
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            :style="{ width: photo.progress + '%' }"
+                                        >
+                                            {{ photo.progress }}%
+                                        </div>
+                                    </div>
+                                    <div v-if="photo.message" class="alert alert-secondary" role="alert">
+                                        {{ photo.message }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -132,8 +183,13 @@
         </div>
     </main>
 </template>
+<style lang="css" scoped>
+@import "../../../css/contact.css";
+</style>
 <script>
+import axios from "axios";
 import {handleRequestException, onFieldTouch, setFieldError, validateForm, validEmail} from "../../../utilis/global";
+import Avatar from '../../../../public/src/images/3d-rendering-zoom-call-avatar.jpg';
 export default {
        name: 'contact-create',
        computed:{
@@ -143,6 +199,13 @@ export default {
        },
        data(){
            return {
+               photo: {
+                   currentImage: undefined,
+                   // previewImage: "https://raw.githubusercontent.com/ThiagoLuizNunes/angular-boilerplate/master/src/assets/imgs/camera-white.png",
+                   previewImage: Avatar,
+                   progress: 0,
+                   message: "",
+               },
                fields: {
                    name: "",
                    email: "",
@@ -179,6 +242,59 @@ export default {
            validEmail,
            validateForm,
            handleRequestException,
+           selectImage() {
+               this.photo.currentImage = this.$refs.file.files.item(0);
+               this.photo.progress = 0;
+               this.photo.message = "";
+               this.uploadProfile();
+           },
+           async cleanUpPreviouslyUploadedImage(){
+               if(/storage/i.test(this.photo.previewImage)){
+                   await axios.delete('/api/contact/delete-contact-image',{
+                       params: {
+                           'path': this.photo.previewImage
+                       }
+                   });
+               }
+           },
+           async uploadProfile(){
+               try {
+                   await this.cleanUpPreviouslyUploadedImage();
+                   const response = await this.processImageUpload("/api/contact/upload-profile-image",
+                       this.photo.currentImage, (event) => {
+                       this.photo.progress = Math.round((100 * event.loaded) / event.total);
+                   });
+
+                   console.log('Line 209');
+                   console.log(response);
+
+                   const { data } = response.data;
+                   this.photo.previewImage = data;
+                   this.$toast.success('Success');
+
+               }catch ({response}) {
+                   console.log('error caught');
+                   console.log(response);
+                   this.photo.progress = 0;
+                   this.photo.currentImage = undefined;
+                   this.photo.message = "Could not upload the image! ";
+                   this.handleRequestException(response);
+               }
+
+           },
+           async processImageUpload(url, file, onUploadProgress) {
+               let formData = new FormData();
+               formData.append("file", file);
+               const NewInstance = axios.create();
+               return await NewInstance.post(url, formData, {
+                   headers: {
+                       Accept: 'application/json',
+                       Authorization: this.$store.state.auth._token,
+                       "Content-Type": "multipart/form-data"
+                   },
+                   onUploadProgress
+               });
+           },
            async fetchCategories(){
                try {
                    this.processing_category_load = true;

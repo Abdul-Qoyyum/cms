@@ -76,4 +76,40 @@ class ContactController extends Controller
             return $this->exceptionResponse($e);
         }
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function createContactImage(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $validator = $this->validateCreateContactProfilePhotoRequest($request);
+        if($validator->fails()){
+            return $this->errorResponse('Validation Error.', $validator->errors(), HttpResponseCode::BAD_REQUEST);
+        }
+        try {
+            $response = ContactRepository::createContactImage($request);
+            return $this->successResponse($response, HttpResponseCode::CREATED);
+        }catch (\Exception $e){
+            return $this->exceptionResponse($e);
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteContactImage(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $validator = $this->validateDeleteContactImage($request);
+        if($validator->fails()){
+            return $this->errorResponse('Validation Error.', $validator->errors(), HttpResponseCode::BAD_REQUEST);
+        }
+        try {
+            $response = ContactRepository::deleteContactImage($request);
+            return $this->successResponse($response, HttpResponseCode::CREATED);
+        }catch (\Exception $e){
+            return $this->exceptionResponse($e);
+        }
+    }
 }

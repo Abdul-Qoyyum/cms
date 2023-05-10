@@ -42,4 +42,29 @@ trait ContactRequestValidatorTrait{
             'category_id.exists' => 'The selected category is invalid'
         ]);
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Validation\Validator
+     */
+    public function validateCreateContactProfilePhotoRequest(Request $request): \Illuminate\Validation\Validator
+    {
+        $rules = [
+            'file.*' => 'sometimes|mimes:jpeg,png,jpg',
+        ];
+        return Validator::make($request->all(), $rules);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Validation\Validator
+     */
+    public function validateDeleteContactImage(Request $request): \Illuminate\Validation\Validator
+    {
+        $rules = [
+            'path' => 'required|string',
+        ];
+        return Validator::make($request->all(), $rules);
+    }
 }
+
