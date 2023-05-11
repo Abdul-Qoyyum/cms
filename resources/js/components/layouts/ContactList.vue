@@ -131,13 +131,13 @@
                                 <div class="text-left font-medium">{{contact.zip_code}}</div>
                             </td>
                             <td class="p-2 whitespace-nowrap">
-                                <router-link :to="'contact-edit/' + contact.id" class="cursor-pointer rounded p-1 mx-1 text-green-500">
-                                    <i class="fas fa-eye"></i></router-link>
-                                <a class="cursor-pointer rounded p-1 mx-1 text-yellow-500">
-                                    <i class="fas fa-edit"></i></a>
-                                <a class="cursor-pointer rounded p-1 mx-1 text-red-500">
+<!--                                <router-link :to="'contact-edit/' + contact.id" class="cursor-pointer rounded p-1 mx-1 text-green-500">-->
+<!--                                    <i class="fas fa-eye"></i></router-link>-->
+                                <router-link :to="'contact-edit/' + contact.id" class="cursor-pointer rounded p-1 mx-1 text-yellow-500">
+                                    <i class="fas fa-edit"></i></router-link>
+                                <button type="button"  @click="() => deleteContact(contact.id)" class="cursor-pointer rounded p-1 mx-1 text-red-500">
                                     <i class="fas fa-trash"></i>
-                                </a>
+                                </button>
                         </td>
 
                         </tr>
@@ -178,6 +178,7 @@
 
 <script>
 import { initFlowbite } from 'flowbite';
+import {handleRequestException} from "../../../utilis/global";
 
 export default {
     name:"contact-list",
@@ -220,6 +221,7 @@ export default {
         ]);
     },
     methods: {
+        handleRequestException,
         getPages(noOfPages){
             const list = [];
             for (let i = 1; i <= noOfPages; i++){
@@ -283,10 +285,44 @@ export default {
                 }
 
 
-            }catch (error){
+            }catch ({ response }){
                 this.processing = false;
-                console.log('Line 178');
-                console.log(error);
+                this.handleRequestException(response);
+            }
+        },
+        deleteContact(id){
+            if(id.length > 0){
+                this.$swal({
+                    title: 'Are you sure you?',
+                    text: "You can't recover contact after it's been deleted!",
+                    // type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes'
+                }).then((result) => {
+                    if (result.value) {
+                        this.loading = true;
+                        axios.delete('/backend/api/admin/private/deleteAllImagesFileForCustomerAssessmentData',{
+                            data: { ids: this.selected } }).then(response => {
+                            this.loading = false;
+                            const { status, message } = response.data;
+                            this.$swal(
+                                'Deleted!',
+                                message,
+                                status
+                            )
+                        })
+                            .catch(({ response }) => {
+                                this.loading = false;
+                                // const { message, detail, response } = error
+                                // this.error = message || 'Unknown Error Occurred'
+                                // this.errorDetail = detail
+                                // this.$emit('failed', this.error)
+                                this.handleRequestException(response);
+                        });
+                    }
+                })
             }
         }
     }
