@@ -21,7 +21,6 @@
     function initGeo(){
 
     }
-    // window.onload = initGeo()
 </script>
 </body>
 </html>
