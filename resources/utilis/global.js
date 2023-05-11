@@ -146,8 +146,8 @@ export function initializePlacesAutoComplete(id){
         const place = autocomplete.getPlace();
         const latitude = place.geometry.location.lat();
         const longitude = place.geometry.location.lng();
-        console.log(latitude,longitude);
         this.setCoords(latitude,longitude);
+        this.forceRerender();
     });
 }
 

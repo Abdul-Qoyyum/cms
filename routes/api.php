@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\ContactController;
+use App\Http\Controllers\API\DashboardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +28,7 @@ Route::middleware('auth:sanctum')->group(function (){
   Route::get('/me', [AuthController::class,'user']);
   Route::get('/categories',[CategoryController::class,'getAllCategories']);
 
+  Route::get('/dashboard-analytics',[DashboardController::class,'dashboardAnalytics']);
   Route::controller(ContactController::class)->group(function (){
       Route::get('contacts','getContacts');
       Route::get('contact/{contact_id}','getContact');

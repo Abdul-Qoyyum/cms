@@ -146,7 +146,7 @@
                         </div>
                         <div class="w-100 mt-12">
                             <!-- google map component -->
-                            <GoogleMap :lat="coordinates.lat" :long="coordinates.long" />
+                            <GoogleMap :lat="coordinates.lat" :long="coordinates.long" :key="componentKey"/>
                             <div class="sm:col-span-2">
                                 <label for="state" class="block text-sm font-medium leading-6 text-gray-900">Address</label>
                                 <div class="mt-2">
@@ -234,6 +234,7 @@ export default {
             processing_contact_update: false,
             process_page_load: true,
             categories: [],
+            componentKey: 0
         }
     },
     async mounted() {
@@ -255,12 +256,14 @@ export default {
         cleanUpPreviouslyUploadedImage,
         uploadProfile,
         processImageUpload,
+        forceRerender(){
+            this.componentKey += 1;
+        },
         async fetchContact(){
             try {
                 const {contact_id} = this.$route.params
                 const response = await axios.get(`/api/contact/${contact_id}`);
                 const { data, success } = response.data;
-                console.log(data);
                 if(success === true){
                     this.fields = data.contact;
                     const {lat, long} = data.contact;

@@ -137,7 +137,12 @@ class ContactRepository{
         ];
     }
 
-    public static function sendContactExport(Request $request){
+    /**
+     * @param Request $request
+     * @return string[]
+     */
+    public static function sendContactExport(Request $request): array
+    {
         $user = $request->user();
         $filename = time() . 'xlsx';
         $file = Excel::download(new ContactExport($user->id), $filename, ExcelExcel::XLSX)->getFile();
@@ -150,7 +155,6 @@ class ContactRepository{
                     'as' => $filename
             ]);
         });
-
         return [
             'message' => "We've sent an email to you with the exported data"
         ];

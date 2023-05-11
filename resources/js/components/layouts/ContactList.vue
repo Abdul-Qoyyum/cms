@@ -244,16 +244,12 @@ export default {
                 const response = await axios.get('/api/send-contact-export');
                 const { data, success } = response.data;
                 this.process_export = false;
-                console.log(success);
-                console.log(data);
                 this.$swal(
                     'Operation Successful!',
                     data.message,
                     true
                 )
             }catch ({ response }){
-                console.log('Error response');
-                console.log(response);
                 this.process_export = false;
                 this.handleRequestException(response);
             }
