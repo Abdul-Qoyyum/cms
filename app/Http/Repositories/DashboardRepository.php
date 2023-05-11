@@ -19,8 +19,6 @@ class DashboardRepository{
                 ->where('category_id',$category->id)
                 ->where('user_id', Auth::id())->count();
         }
-
-        Log::info(json_encode($response));
         return $response;
     }
 }
