@@ -1,5 +1,5 @@
-import { createApp } from 'vue';
-// import { createApp } from 'vue/dist/vue.esm-bundler';
+// import { createApp } from 'vue';
+import { createApp } from 'vue/dist/vue.esm-bundler';
 import ToastPlugin from 'vue-toast-notification';
 import axios from "axios";
 import Router from '@/router';
@@ -17,7 +17,6 @@ import setupAxios from "./api/api";
 
 axios.defaults.timeout = 10000;
 setupAxios(axios, store);
-
 
 createApp({}).use(Router)
     .use(store)

@@ -9,6 +9,7 @@ use App\Http\Traits\ContactRequestValidatorTrait;
 use App\Http\Traits\ResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ContactController extends Controller
 {

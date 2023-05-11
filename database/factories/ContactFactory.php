@@ -25,6 +25,8 @@ class ContactFactory extends Factory
             'city' => fake()->city,
             'country' => fake()->country,
             'zip_code' => fake()->postcode,
+            'lat' => fake()->latitude($min = -90, $max = 90),
+            'long' => fake()->longitude($min = -180, $max = 180),
         ];
     }
 }

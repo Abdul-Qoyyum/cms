@@ -24,8 +24,14 @@ class Contact extends Model
         'zip_code',
         'user_id',
         'category_id',
+        'photo',
+        'lat',
+        'long',
     ];
 
+//    protected $casts = [
+//        'lat' => ''
+//    ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
