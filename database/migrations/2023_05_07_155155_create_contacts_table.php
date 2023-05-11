@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('state');
             $table->string('city');
             $table->string('country');
-            $table->string('photo')->default(env('APP_URL') . '/public/src/images/3d-rendering-zoom-call-avatar.jpg');
+            $table->string('photo')->default('/src/images/3d-rendering-zoom-call-avatar.jpg');
             $table->string('lat')->nullable()->default(0);
             $table->string('long')->nullable()->default(0);
             $table->string('zip_code');

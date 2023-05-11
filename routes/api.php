@@ -30,10 +30,12 @@ Route::middleware('auth:sanctum')->group(function (){
   Route::controller(ContactController::class)->group(function (){
       Route::get('contacts','getContacts');
       Route::get('contact/{contact_id}','getContact');
-      Route::put('contact/{contact_id}','updateContact');
+      Route::get('send-contact-export','sendContactExport');
       Route::post('contact','createContact');
       Route::post('contact/upload-profile-image','createContactImage');
+      Route::put('contact/{contact_id}','updateContact');
       Route::delete('contact/delete-contact-image','deleteContactImage');
+      Route::delete('contact/delete-contact/{id}','deleteContact');
   });
 
 

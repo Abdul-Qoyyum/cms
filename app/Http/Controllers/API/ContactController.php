@@ -9,7 +9,7 @@ use App\Http\Traits\ContactRequestValidatorTrait;
 use App\Http\Traits\ResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+
 
 class ContactController extends Controller
 {
@@ -67,8 +67,6 @@ class ContactController extends Controller
         if($validator->fails()){
             return $this->errorResponse('Validation Error.', $validator->errors(), HttpResponseCode::BAD_REQUEST);
         }
-        Log::info('Line 70');
-        Log::info(json_encode($request->all()));
         try {
             DB::beginTransaction();
             $response = ContactRepository::updateContact($request, $id);
@@ -110,7 +108,37 @@ class ContactController extends Controller
         }
         try {
             $response = ContactRepository::deleteContactImage($request);
-            return $this->successResponse($response, HttpResponseCode::CREATED);
+            return $this->successResponse($response);
+        }catch (\Exception $e){
+            return $this->exceptionResponse($e);
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteContact(Request $request, $id): \Illuminate\Http\JsonResponse
+    {
+        try {
+            $response = ContactRepository::deleteContact($request, $id);
+            return $this->successResponse($response);
+        }catch (\Exception $e){
+            return $this->exceptionResponse($e);
+        }
+    }
+
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function sendContactExport(Request $request): \Illuminate\Http\JsonResponse
+    {
+        try {
+            $response = ContactRepository::sendContactExport($request);
+            return $this->successResponse($response);
         }catch (\Exception $e){
             return $this->exceptionResponse($e);
         }

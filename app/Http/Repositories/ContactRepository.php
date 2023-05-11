@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Repositories;
 
+use App\Exports\ContactExport;
 use App\Http\Constants\HttpResponseCode;
 use App\Http\Resources\ContactResource;
 use App\Http\Traits\PaginationHelperTrait;
@@ -9,7 +10,10 @@ use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Excel as ExcelExcel;
 
 class ContactRepository{
     use PaginationHelperTrait, ResponseTrait;
@@ -89,8 +93,6 @@ class ContactRepository{
         if(!$contact){
             (new self)->throwException('Contact not found', HttpResponseCode::NOT_FOUND);
         }
-        Log::info('Line update');
-        Log::info(json_encode($request->all()));
         $contact->update($request->all());
         return [ 'contact' => $contact ];
     }
@@ -117,7 +119,40 @@ class ContactRepository{
             unlink($file_path);
         }
         return [
-            'message' => 'Image deletion successfull'
+            'message' => 'Image deletion successfully'
+        ];
+    }
+
+    public static function deleteContact(Request $request, $id){
+        $contact = Contact::query()->find($id);
+        if(!$contact){
+            (new self)->throwException('Contact not found', HttpResponseCode::NOT_FOUND);
+        }
+        $request->merge(['path' => $contact->photo]);
+        $contact->delete();
+        self::deleteContactImage($request);
+        return [
+            'status' => "success",
+            'message' => 'Contact Deleted successfully'
+        ];
+    }
+
+    public static function sendContactExport(Request $request){
+        $user = $request->user();
+        $filename = time() . 'xlsx';
+        $file = Excel::download(new ContactExport($user->id), $filename, ExcelExcel::XLSX)->getFile();
+        $data["email"] = $user->email;
+        $data["title"] = 'Contact(s) CSV Export';
+        $data["name"] = $user->name;
+        Mail::send('emails.export', $data, function($message)use($data, $file, $filename) {
+            $message->to($data['email'])
+                ->subject($data['title'])->attach($file,[
+                    'as' => $filename
+            ]);
+        });
+
+        return [
+            'message' => "We've sent an email to you with the exported data"
         ];
     }
 }
