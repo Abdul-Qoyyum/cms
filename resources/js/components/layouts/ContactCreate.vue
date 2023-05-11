@@ -137,7 +137,7 @@
 
                         <div class="w-100 mt-12">
                             <!-- google map component -->
-                            <GoogleMap :lat="coordinates.lat" :long="coordinates.long" />
+                            <GoogleMap :lat="coordinates.lat" :long="coordinates.long" :key="componentKey" />
                             <div class="sm:col-span-2">
                                 <label for="state" class="block text-sm font-medium leading-6 text-gray-900">Address</label>
                                 <div class="mt-2">
@@ -202,8 +202,8 @@ export default {
                    category_id: "",
                },
                coordinates: {
-                   lat: 6.5243793,
-                   long: 3.3792057
+                   lat: "6.5243793",
+                   long: "3.3792057"
                },
                errors:{
                    name: "",
@@ -219,6 +219,7 @@ export default {
                processing_category_load: false,
                processing_contact_create: false,
                categories: [],
+               componentKey: 0
            }
        },
        mounted() {
@@ -234,6 +235,7 @@ export default {
                const latitude = place.geometry.location.lat();
                const longitude = place.geometry.location.lng();
                this.setCoords(latitude,longitude);
+               this.forceRerender();
            });
        },
        methods: {
@@ -244,6 +246,9 @@ export default {
            handleRequestException,
            setCoords(lat, long){
              this.coordinates = { lat, long}
+           },
+           forceRerender(){
+             this.componentKey += 1;
            },
            selectImage() {
                this.photo.currentImage = this.$refs.file.files.item(0);
