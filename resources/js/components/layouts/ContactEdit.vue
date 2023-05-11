@@ -146,7 +146,7 @@
                         </div>
                         <div class="w-100 mt-12">
                             <!-- google map component -->
-                            <GoogleMap :lat="coordinates.lat" :long="coordinates.long" :key="componentKey"/>
+                            <GoogleMap :lat="latitude" :long="longitude" :key="componentKey"/>
                             <div class="sm:col-span-2">
                                 <label for="state" class="block text-sm font-medium leading-6 text-gray-900">Address</label>
                                 <div class="mt-2">
@@ -193,6 +193,12 @@ export default {
     computed:{
         nameError(){
             return this.errors.name
+        },
+        latitude(){
+            return Number(this.coordinates.lat)
+        },
+        longitude(){
+            return Number(this.coordinates.long)
         }
     },
     components: { GoogleMap },
@@ -216,8 +222,8 @@ export default {
                 category_id: "",
             },
             coordinates: {
-                lat: "6.5243793",
-                long: "3.3792057"
+                lat: 6.5243793,
+                long: 3.3792057
             },
             errors:{
                 name: "",
