@@ -67,6 +67,8 @@ class ContactController extends Controller
         if($validator->fails()){
             return $this->errorResponse('Validation Error.', $validator->errors(), HttpResponseCode::BAD_REQUEST);
         }
+        Log::info('Line 70');
+        Log::info(json_encode($request->all()));
         try {
             DB::beginTransaction();
             $response = ContactRepository::updateContact($request, $id);

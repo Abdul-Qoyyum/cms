@@ -19,6 +19,9 @@ trait ContactRequestValidatorTrait{
             'country' => 'required|string',
             'zip_code' => 'required|string',
             'category_id' => 'required|string|exists:categories,id',
+            'photo' => 'nullable|string',
+            'lat' => 'nullable|numeric',
+            'long' => 'nullable|numeric',
         ];
         return Validator::make($request->all(), $rules,[
             'category_id.exists' => 'The selected category is invalid'
@@ -37,6 +40,9 @@ trait ContactRequestValidatorTrait{
             'country' => 'nullable|string',
             'zip_code' => 'nullable|string',
             'category_id' => 'nullable|string|exists:categories,id',
+            'photo' => 'nullable|string',
+            'lat' => 'nullable|numeric',
+            'long' => 'nullable|numeric',
         ];
         return Validator::make($request->all(), $rules,[
             'category_id.exists' => 'The selected category is invalid'

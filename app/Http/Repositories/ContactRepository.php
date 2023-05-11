@@ -89,6 +89,8 @@ class ContactRepository{
         if(!$contact){
             (new self)->throwException('Contact not found', HttpResponseCode::NOT_FOUND);
         }
+        Log::info('Line update');
+        Log::info(json_encode($request->all()));
         $contact->update($request->all());
         return [ 'contact' => $contact ];
     }

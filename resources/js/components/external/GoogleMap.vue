@@ -10,8 +10,8 @@ import { GoogleMap, Marker } from "vue3-google-map";
 export default defineComponent({
     components: { GoogleMap, Marker },
     props:{
-      lat: Number,
-      long: Number,
+      lat: String,
+      long: String,
     },
     data(){
         return{
@@ -20,7 +20,7 @@ export default defineComponent({
         }
     },
     setup(props) {
-        const center = { lat: props.lat, lng: props.long }
+        const center = { lat: Number(props.lat), lng: Number(props.long) }
         return { center }
     },
 });

@@ -230,12 +230,10 @@ export default {
                country: ["FR","NG"]
            })
            autocomplete.addListener('place_changed', () => {
-               var place = autocomplete.getPlace();
-               var latitude = place.geometry.location.lat();
-               var longitude = place.geometry.location.lng();
+               const place = autocomplete.getPlace();
+               const latitude = place.geometry.location.lat();
+               const longitude = place.geometry.location.lng();
                this.setCoords(latitude,longitude);
-               // document.getElementById('lat').value = latitude;
-               // document.getElementById('lng').value = longitude;
            });
        },
        methods: {
