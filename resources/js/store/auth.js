@@ -36,14 +36,6 @@ export default {
             commit('SET_TOKEN', token);
             commit('SET_USER',user);
             commit('SET_AUTHENTICATED',true);
-            // return axios.post('/api/me').then(({data})=>{
-            //     commit('SET_USER',data)
-            //     commit('SET_AUTHENTICATED',true)
-            //     router.push({name:'dashboard'})
-            // }).catch(({response:{data}})=>{
-            //     commit('SET_USER',{})
-            //     commit('SET_AUTHENTICATED',false)
-            // })
         },
         logout({commit}){
             commit('SET_USER',{})
