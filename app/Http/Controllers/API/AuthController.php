@@ -29,6 +29,7 @@ class AuthController extends Controller
             DB::rollBack();
             return $this->exceptionResponse($e);
         }
+
     }
 
 
@@ -52,5 +53,9 @@ class AuthController extends Controller
 
     public function user(Request $request){
         return $request->user();
+    }
+
+    public function logout(Request $request){
+        AuthRepository::logout($request);
     }
 }

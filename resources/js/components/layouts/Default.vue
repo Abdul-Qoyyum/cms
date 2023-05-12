@@ -130,11 +130,9 @@ export default {
         },
         async logout(){
             this.signOut();
-            this.$router.push({name:"login"})
-            // await axios.post('/api/auth/logout').then(({data})=>{
-            //     this.signOut()
-            //     this.$router.push({name:"login"})
-            // })
+            await axios.post('/api/logout').then(({data})=>{
+                this.$router.push({name:"login"})
+            })
         }
     }
 }

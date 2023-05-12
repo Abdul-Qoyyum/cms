@@ -50,4 +50,13 @@ class AuthRepository{
         }
     }
 
+    /**
+     * @param Request $request
+     * @return void
+     */
+    public static function logout(Request $request): void
+    {
+        $user = $request->user();
+        $user->tokens()->delete();
+    }
 }
