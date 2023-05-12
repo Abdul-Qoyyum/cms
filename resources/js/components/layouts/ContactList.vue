@@ -172,7 +172,7 @@
                         </li>
 
                         <li v-for="(page, i) in pagination.pages" :key="i">
-                            <button type="button" @click="goToPage(page)" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">{{page}}</button>
+                            <button type="button" @click="goToPage(page)" class="px-3 py-2 leading-tight text-gray-500 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"  :class="{'bg-blue': currentPage === i, 'bg-white': currentPage !== i }">{{page}}</button>
                         </li>
 
                         <li v-if="hasReachedLastPage">
@@ -202,6 +202,9 @@ export default {
       },
       passedFirstPage(){
           return this.pagination.current_page > 1;
+      },
+      currentPage(){
+          return this.pagination.current_page;
       }
     },
     data(){
