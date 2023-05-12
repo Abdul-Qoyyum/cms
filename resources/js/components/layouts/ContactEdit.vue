@@ -288,7 +288,6 @@ export default {
             try {
                 if(this.validateForm()){
                     this.processing_contact_update = true;
-                    await this.cleanUpPreviouslyUploadedImage();
                     const response = await axios.put(`/api/contact/${this.$route.params.contact_id}`, {
                         ...this.fields,
                         photo: this.photo.previewImage,

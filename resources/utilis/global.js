@@ -92,7 +92,7 @@ export async function cleanUpPreviouslyUploadedImage(){
 export async function uploadProfile(){
     try {
         await this.cleanUpPreviouslyUploadedImage();
-        const response = await this.processImageUpload("/api/contact/upload-profile-image",
+        const response = await this.processImageUpload(`/api/contact/update-contact-image/${this.$route.params.contact_id}`,
             this.photo.currentImage, (event) => {
                 this.photo.progress = Math.round((100 * event.loaded) / event.total);
             });

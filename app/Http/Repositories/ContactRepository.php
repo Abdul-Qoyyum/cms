@@ -112,6 +112,15 @@ class ContactRepository{
         return Storage::disk('local')->url($path);
     }
 
+    public static function updateContactImage(Request $request, $contact_id){
+        $contact = Contact::query()->find($contact_id);
+        if(!$contact){
+            (new self)->throwException('Contact not found', HttpResponseCode::NOT_FOUND);
+        }
+        $image = self::createContactImage($request);
+        $contact->update(['photo' => $image]);
+        return $image;
+    }
     public static function deleteContactImage(Request $request, $disk = 'local'): array
     {
         $file_path = storage_path(str_replace("/storage","app/public",$request->get('path')));

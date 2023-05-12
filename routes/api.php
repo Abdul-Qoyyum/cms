@@ -35,6 +35,7 @@ Route::middleware('auth:sanctum')->group(function (){
       Route::get('send-contact-export','sendContactExport');
       Route::post('contact','createContact');
       Route::post('contact/upload-profile-image','createContactImage');
+      Route::post('contact/update-contact-image/{contact_id}','updateContactImage');
       Route::put('contact/{contact_id}','updateContact');
       Route::delete('contact/delete-contact-image','deleteContactImage');
       Route::delete('contact/delete-contact/{id}','deleteContact');

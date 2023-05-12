@@ -72,5 +72,18 @@ trait ContactRequestValidatorTrait{
         ];
         return Validator::make($request->all(), $rules);
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Validation\Validator
+     */
+    public function validateUpdateContactProfilePhotoRequest(Request $request): \Illuminate\Validation\Validator
+    {
+        $rules = [
+            'file.*' => 'sometimes|mimes:jpeg,png,jpg',
+        ];
+        return Validator::make($request->all(), $rules);
+    }
+
 }
 
