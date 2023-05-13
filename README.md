@@ -1,3 +1,6 @@
+## About
+Contact Management System (CMS) is a Single Page Application Built with Laravel and Vuejs.
+
 ## Dependencies
 ```
   - php 8.0.28
